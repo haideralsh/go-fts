@@ -10,23 +10,23 @@ import (
 	"unicode"
 )
 
+// Document struct
 // Using an object instead of just the text string in order to add other properties if needed
-type document struct {
+type Document struct {
 	ID   int
 	Text string `json:"title"`
 }
 
-func loadDocuments(path string) ([]document, error) {
+func LoadDocuments(path string) ([]Document, error) {
 	// Open the file
 	f, err := ioutil.ReadFile(path)
-
 	if err != nil {
 		return nil, err
 	}
 
 	// Inline struct for an object containing array of documents
 	dump := struct {
-		Documents []document
+		Documents []Document
 	}{}
 
 	if err := json.Unmarshal(f, &dump.Documents); err != nil {
@@ -40,9 +40,6 @@ func loadDocuments(path string) ([]document, error) {
 
 	return dump.Documents, nil
 }
-
-// To build an inverted index
-// Take raw text -> tokenize -> normalize & filter -> search in tokens
 func tokenize(text string) []string {
 	// takes a string and split it according to the rules inside the anonymous
 	// function
@@ -92,16 +89,16 @@ func stopwordFilter(tokens []string) []string {
 	return r
 }
 
-func search(docs []document, term string) []document {
+func search(docs []Document, term string) []Document {
 	// expression to match (?i) -> case insensitive search \b -> matches the
 	// word boundary meaning if we search for `cat`, then `category` is not
 	// matched.
 	re := regexp.MustCompile(`(?i)\b` + term + `\b`)
 
-	// documents to return
-	var r []document
+	// Documents to return
+	var r []Document
 
-	// we loop through each document to see if the `Text` field contains the
+	// we loop through each Document to see if the `Text` field contains the
 	// term
 	for _, doc := range docs {
 		if re.MatchString(doc.Text) {
@@ -123,8 +120,8 @@ func analyze(text string) []string {
 // idx := { "apple": [1, 2], "ball": [2, 3], "cat": [1] }
 type index map[string][]int
 
-func (idx index) add(docs []document) {
-	// loop over the document (which we decoded from the JSON and added to them
+func (idx index) add(docs []Document) {
+	// loop over the Document (which we decoded from the JSON and added to them
 	// their indexes as IDs)
 	for _, doc := range docs {
 		// loop over the each token that is got normalized and filtered
@@ -134,8 +131,8 @@ func (idx index) add(docs []document) {
 			ids := idx[token]
 
 			// if the array exists and the last int in the array is not equal to
-			// the id of the document because say we get the token "cat" twice
-			// in the same document, we want to add the ID for
+			// the id of the Document because say we get the token "cat" twice
+			// in the same Document, we want to add the ID for
 			// document only once.
 			if ids != nil && ids[len(ids)-1] == doc.ID {
 				// Don't add same ID twice.
@@ -170,10 +167,11 @@ func (idx index) search(text string) [][]int {
 func main() {
 	start := time.Now()
 
-	docs, err := loadDocuments("data/example.json")
+	docs, err := LoadDocuments("data/example.json")
 	if err != nil {
 		log.Fatal("An error occured while loading documents", err)
 	}
 
 	log.Printf("loaded %d document(s) in %v", len(docs), time.Since(start))
+
 }
