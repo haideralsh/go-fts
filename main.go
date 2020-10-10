@@ -1,41 +1,35 @@
 package main
 
 import (
-	"encoding/xml"
+	"encoding/json"
+	"io/ioutil"
 	"log"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 	"unicode"
 )
 
+// Using an object instead of just the text string in order to add other properties if needed
 type document struct {
-	Title string `xml:"title"`
-	URL   string `xml:"url"`
-	Text  string `xml:"abstract"`
-	ID    int
+	ID   int
+	Text string `json:"title"`
 }
 
 func loadDocuments(path string) ([]document, error) {
 	// Open the file
-	f, err := os.Open(path)
+	f, err := ioutil.ReadFile(path)
 
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
-
-	// Create a new decoder
-	dec := xml.NewDecoder(f)
 
 	// Inline struct for an object containing array of documents
 	dump := struct {
-		Documents []document `xml:"doc"`
+		Documents []document
 	}{}
 
-	// Decode the object
-	if err := dec.Decode(&dump); err != nil {
+	if err := json.Unmarshal(f, &dump.Documents); err != nil {
 		return nil, err
 	}
 
@@ -43,6 +37,7 @@ func loadDocuments(path string) ([]document, error) {
 		// change their IDs to their index
 		dump.Documents[i].ID = i
 	}
+
 	return dump.Documents, nil
 }
 
@@ -175,10 +170,10 @@ func (idx index) search(text string) [][]int {
 func main() {
 	start := time.Now()
 
-	docs, err := loadDocuments("path/to/file")
+	docs, err := loadDocuments("data/example.json")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("An error occured while loading documents", err)
 	}
 
-	log.Printf("loaded %d documents in %v", len(docs), time.Since(start))
+	log.Printf("loaded %d document(s) in %v", len(docs), time.Since(start))
 }

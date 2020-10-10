@@ -4,5 +4,5 @@ Loads XML files and processes them to create an reverse index.
 
 Todos:
 
-- [ ] Make the input JSON instead of XML
+- [x] Make the input JSON instead of XML
 - [ ] Seperate main into different packages
