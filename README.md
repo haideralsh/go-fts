@@ -1,4 +1,4 @@
-# A mini, toy, full-text search engine built with go for learning
+# A mini, toy, full-text search engine built with go for learning purposes
 
 Loads XML files and processes them to create an reverse index.
 
