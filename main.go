@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-func search(docs []Document, term string) []Document {
+func search(docs []document, term string) []document {
 	// expression to match (?i) -> case insensitive search \b -> matches the
 	// word boundary meaning if we search for `cat`, then `category` is not
 	// matched.
 	re := regexp.MustCompile(`(?i)\b` + term + `\b`)
 
 	// Documents to return
-	var r []Document
+	var r []document
 
 	// we loop through each Document to see if the `Text` field contains the
 	// term
@@ -28,7 +28,7 @@ func search(docs []Document, term string) []Document {
 func main() {
 	start := time.Now()
 
-	docs, err := LoadDocuments("data/example.json")
+	docs, err := loadDocuments("data/example.json")
 	if err != nil {
 		log.Fatal("An error occured while loading documents", err)
 	}
