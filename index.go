@@ -43,7 +43,6 @@ func (idx index) search(text string) [][]int {
 		}
 	}
 
-	// Return the document ids that contain this any word (token) of the
-	// passed text
+	// Return the document ids that contain this word (token)
 	return result
 }

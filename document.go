@@ -5,10 +5,11 @@ import (
 	"io/ioutil"
 )
 
-// Using an object instead of just the text string in order to add other properties if needed
+// Using an object instead of just the text string in order to add other
+// properties if needed
 type document struct {
 	ID   int
-	Text string `json:"title"`
+	Text string `json:"text"`
 }
 
 func loadDocuments(path string) ([]document, error) {

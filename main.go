@@ -29,9 +29,23 @@ func main() {
 	start := time.Now()
 
 	docs, err := loadDocuments("data/example.json")
+
 	if err != nil {
 		log.Fatal("An error occured while loading documents", err)
 	}
 
-	log.Printf("loaded %d document(s) in %v", len(docs), time.Since(start))
+	log.Printf("Loaded %d document(s) in %v", len(docs), time.Since(start))
+
+	start = time.Now()
+
+	idx := make(index)
+	idx.add(docs)
+
+	log.Printf("Indexed %d document(s) in %v", len(docs), time.Since(start))
+
+	ids := idx.search("made")
+
+	// Printing the value for now since go doesn't allow unused variables
+	log.Print(ids)
+
 }
