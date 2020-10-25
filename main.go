@@ -45,7 +45,7 @@ func main() {
 
 	ids := idx.indexOf("the one you are")
 
-	// Printing the value for now since go doesn't allow unused variables
-	log.Print(ids)
-
+	for _, id := range ids {
+		log.Print(docs[id])
+	}
 }
