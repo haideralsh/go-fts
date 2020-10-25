@@ -48,12 +48,16 @@ func (idx index) indexOf(text string) []int {
 }
 
 func flatten(arr [][]int) []int {
+	// Make a new hashmap that we will use to insure we only return unique ids
+	// using a hashmap so that our id look up is O(1)
 	flat := make(map[int]int)
 
+	// for each array in the big array
 	for _, inner := range arr {
-		for _, n := range inner {
-			if _, ok := flat[n]; !ok {
-				flat[n] = n
+		// For each id in the inner array
+		for _, id := range inner {
+			if _, ok := flat[id]; !ok {
+				flat[id] = id
 			}
 		}
 	}
