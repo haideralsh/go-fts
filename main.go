@@ -43,7 +43,7 @@ func main() {
 
 	log.Printf("Indexed %d document(s) in %v", len(docs), time.Since(start))
 
-	ids := idx.search("made")
+	ids := idx.indexOf("the one you are")
 
 	// Printing the value for now since go doesn't allow unused variables
 	log.Print(ids)

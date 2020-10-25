@@ -30,7 +30,7 @@ func (idx index) add(docs []document) {
 	}
 }
 
-func (idx index) search(text string) [][]int {
+func (idx index) indexOf(text string) []int {
 	var result [][]int
 
 	// Filter the the text (lowercase, etc...) before searching
@@ -44,5 +44,25 @@ func (idx index) search(text string) [][]int {
 	}
 
 	// Return the document ids that contain this word (token)
+	return flatten(result)
+}
+
+func flatten(arr [][]int) []int {
+	flat := make(map[int]int)
+
+	for _, inner := range arr {
+		for _, n := range inner {
+			if _, ok := flat[n]; !ok {
+				flat[n] = n
+			}
+		}
+	}
+
+	var result []int
+
+	for _, n := range flat {
+		result = append(result, n)
+	}
+
 	return result
 }
