@@ -1,4 +1,4 @@
-package main
+package process
 
 import (
 	"strings"
@@ -54,7 +54,7 @@ func stopwordFilter(tokens []string) []string {
 	return r
 }
 
-func process(text string) []string {
+func Process(text string) []string {
 	tokens := tokenize(text)
 	tokens = lowercaseFilter(tokens)
 	tokens = stopwordFilter(tokens)

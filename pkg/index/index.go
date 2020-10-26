@@ -1,15 +1,20 @@
-package main
+package index
 
-// the index type is for an object with the structure:
+import (
+	"github.com/haideralsh/go-fts/pkg/document"
+	"github.com/haideralsh/go-fts/pkg/process"
+)
+
+// the Index type is for an object with the structure:
 // idx := { "apple": [1, 2], "ball": [2, 3], "cat": [1] }
-type index map[string][]int
+type Index map[string][]int
 
-func (idx index) add(docs []document) {
+func (idx Index) Add(docs []document.Document) {
 	// loop over the document (which we decoded from the JSON and added to them
 	// their indexes as IDs)
 	for _, doc := range docs {
 		// loop over the each token that is got normalized and filtered
-		for _, token := range process(doc.Text) {
+		for _, token := range process.Process(doc.Text) {
 			// Get the array for each token from the map: idx["cat"] would
 			// return [1]
 			ids := idx[token]
@@ -30,12 +35,12 @@ func (idx index) add(docs []document) {
 	}
 }
 
-func (idx index) indexOf(text string) []int {
+func (idx Index) IndexOf(text string) []int {
 	var result [][]int
 
 	// Filter the the text (lowercase, etc...) before searching
 	// then loop over each word
-	for _, token := range process(text) {
+	for _, token := range process.Process(text) {
 		// Check if the index contains the word
 		if ids, ok := idx[token]; ok {
 			// if so add the document id to the results array

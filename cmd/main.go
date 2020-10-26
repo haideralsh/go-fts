@@ -4,16 +4,19 @@ import (
 	"log"
 	"regexp"
 	"time"
+
+	"github.com/haideralsh/go-fts/pkg/document"
+	"github.com/haideralsh/go-fts/pkg/index"
 )
 
-func search(docs []document, term string) []document {
+func search(docs []document.Document, term string) []document.Document {
 	// expression to match (?i) -> case insensitive search \b -> matches the
 	// word boundary meaning if we search for `cat`, then `category` is not
 	// matched.
 	re := regexp.MustCompile(`(?i)\b` + term + `\b`)
 
 	// Documents to return
-	var r []document
+	var r []document.Document
 
 	// we loop through each Document to see if the `Text` field contains the
 	// term
@@ -28,7 +31,7 @@ func search(docs []document, term string) []document {
 func main() {
 	start := time.Now()
 
-	docs, err := loadDocuments("data/example.json")
+	docs, err := document.Load("data/example.json")
 
 	if err != nil {
 		log.Fatal("An error occured while loading documents", err)
@@ -38,12 +41,12 @@ func main() {
 
 	start = time.Now()
 
-	idx := make(index)
-	idx.add(docs)
+	idx := make(index.Index)
+	idx.Add(docs)
 
 	log.Printf("Indexed %d document(s) in %v", len(docs), time.Since(start))
 
-	ids := idx.indexOf("the one you are")
+	ids := idx.IndexOf("the one you are")
 
 	for _, id := range ids {
 		log.Print(docs[id])
