@@ -30,29 +30,24 @@ func search(docs []document.Document, term string) []document.Document {
 }
 
 func main() {
-	start := time.Now()
-
 	path, err := filepath.Abs("../data/example.json")
 	if err != nil {
 		log.Fatal("No such file. ", err)
 	}
-	docs, err := document.Load(path)
 
+	start := time.Now()
+	docs, err := document.Load(path)
 	if err != nil {
 		log.Fatal("An error occured while loading documents. ", err)
 	}
-
 	log.Printf("Loaded %d document(s) in %v", len(docs), time.Since(start))
 
 	start = time.Now()
-
 	idx := make(index.Index)
 	idx.Add(docs)
-
 	log.Printf("Indexed %d document(s) in %v", len(docs), time.Since(start))
 
 	ids := idx.IndexOf("the one you are")
-
 	for _, id := range ids {
 		log.Print(docs[id])
 	}
