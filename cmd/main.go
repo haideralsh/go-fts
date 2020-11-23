@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"path/filepath"
 	"regexp"
 	"time"
 
@@ -31,10 +32,14 @@ func search(docs []document.Document, term string) []document.Document {
 func main() {
 	start := time.Now()
 
-	docs, err := document.Load("data/example.json")
+	path, err := filepath.Abs("../data/example.json")
+	if err != nil {
+		log.Fatal("No such file. ", err)
+	}
+	docs, err := document.Load(path)
 
 	if err != nil {
-		log.Fatal("An error occured while loading documents", err)
+		log.Fatal("An error occured while loading documents. ", err)
 	}
 
 	log.Printf("Loaded %d document(s) in %v", len(docs), time.Since(start))
