@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 	"regexp"
 	"time"
@@ -30,9 +31,14 @@ func search(docs []document.Document, term string) []document.Document {
 }
 
 func main() {
-	path, err := filepath.Abs("../data/example.json")
+	if len(os.Args) < 2 {
+		log.Fatal("Please provide the data file path as an argument.")
+	}
+
+	r := os.Args[1]
+	path, err := filepath.Abs(r)
 	if err != nil {
-		log.Fatal("No such file. ", err)
+		log.Fatalf("Invalid path %s", r)
 	}
 
 	start := time.Now()
