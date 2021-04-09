@@ -13,7 +13,7 @@ Todos:
 - [x] Make the input JSON instead of XML
 - [x] Return the documents that match instead of their indexes
 - [x] Accept the file path as a command line argument
-- [ ] Change the file path from an argument to a flag
+- [ ] Change the file path to be a flag
 - [ ] Support wildcards
-- [ ] Extend boolean queries to support OR and NOT
+- [ ] Extend boolean queries to support `OR` and `NOT`
 - [ ] Sort results by relevance
