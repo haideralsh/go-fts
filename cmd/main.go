@@ -1,14 +1,13 @@
 package main
 
 import (
+	"flag"
+	"github.com/haideralsh/go-fts/pkg/document"
+	"github.com/haideralsh/go-fts/pkg/index"
 	"log"
-	"os"
 	"path/filepath"
 	"regexp"
 	"time"
-
-	"github.com/haideralsh/go-fts/pkg/document"
-	"github.com/haideralsh/go-fts/pkg/index"
 )
 
 func search(docs []document.Document, term string) []document.Document {
@@ -31,14 +30,13 @@ func search(docs []document.Document, term string) []document.Document {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("Please provide the data file path as an argument.")
-	}
+	f := flag.String("path", "data/example.txt", "Path for the file to index")
+	q := flag.String("query", "the one you are", "Search query")
+	flag.Parse()
 
-	r := os.Args[1]
-	path, err := filepath.Abs(r)
+	path, err := filepath.Abs(*f)
 	if err != nil {
-		log.Fatalf("Invalid path %s", r)
+		log.Fatalf("Invalid path %s", f)
 	}
 
 	start := time.Now()
@@ -53,7 +51,11 @@ func main() {
 	idx.Add(docs)
 	log.Printf("Indexed %d document(s) in %v", len(docs), time.Since(start))
 
-	ids := idx.IndexOf("the one you are")
+	ids := idx.IndexOf(*q)
+	if len(ids) == 0 {
+		log.Fatalf("No results found for %s", *q)
+	}
+
 	for _, id := range ids {
 		log.Print(docs[id])
 	}
